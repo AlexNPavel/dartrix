@@ -759,6 +759,14 @@
         }
         throw H.wrapException(new P.UnsupportedError("" + receiver));
       },
+      round$0: function(receiver) {
+        if (receiver > 0) {
+          if (receiver !== 1 / 0)
+            return Math.round(receiver);
+        } else if (receiver > -1 / 0)
+          return 0 - Math.round(0 - receiver);
+        throw H.wrapException(new P.UnsupportedError("" + receiver));
+      },
       toString$0: function(receiver) {
         if (receiver === 0 && 1 / receiver < 0)
           return "-0.0";
@@ -772,6 +780,9 @@
         if (typeof other !== "number")
           throw H.wrapException(H.argumentErrorValue(other));
         return receiver + other;
+      },
+      $mul: function(receiver, other) {
+        return receiver * other;
       },
       _tdivFast$1: function(receiver, other) {
         return (receiver | 0) === receiver ? receiver / other | 0 : this.toInt$0(receiver / other);
@@ -851,6 +862,24 @@
         if (startIndex === 0 && endIndex0 === endIndex)
           return result;
         return result.substring(startIndex, endIndex0);
+      },
+      $mul: function(receiver, times) {
+        var s, result;
+        if (0 >= times)
+          return "";
+        if (times === 1 || receiver.length === 0)
+          return receiver;
+        if (times !== times >>> 0)
+          throw H.wrapException(C.C_OutOfMemoryError);
+        for (s = receiver, result = ""; true;) {
+          if ((times & 1) === 1)
+            result = s + result;
+          times = times >>> 1;
+          if (times === 0)
+            break;
+          s += s;
+        }
+        return result;
       },
       toString$0: function(receiver) {
         return receiver;
@@ -2011,23 +2040,22 @@
       }
       return hash;
     },
-    Primitives__parseIntError: function(source, handleError) {
-      throw H.wrapException(new P.FormatException(source, null, null));
+    Primitives__parseDoubleError: function(source, handleError) {
+      throw H.wrapException(new P.FormatException("Invalid double", source, null));
     },
-    Primitives_parseInt: function(source, radix, handleError) {
-      var match, decimalMatch;
+    Primitives_parseDouble: function(source, handleError) {
+      var result, trimmed;
       H.checkString(source);
-      match = /^\s*[+-]?((0x[a-f0-9]+)|(\d+)|([a-z0-9]+))\s*$/i.exec(source);
-      if (match == null)
-        return H.Primitives__parseIntError(source, handleError);
-      if (3 >= match.length)
-        return H.ioore(match, 3);
-      decimalMatch = match[3];
-      if (decimalMatch != null)
-        return parseInt(source, 10);
-      if (match[2] != null)
-        return parseInt(source, 16);
-      return H.Primitives__parseIntError(source, handleError);
+      if (!/^\s*[+-]?(?:Infinity|NaN|(?:\.\d+|\d+(?:\.\d*)?)(?:[eE][+-]?\d+)?)\s*$/.test(source))
+        return H.Primitives__parseDoubleError(source, handleError);
+      result = parseFloat(source);
+      if (isNaN(result)) {
+        trimmed = C.JSString_methods.trim$0(source);
+        if (trimmed === "NaN" || trimmed === "+NaN" || trimmed === "-NaN")
+          return result;
+        return H.Primitives__parseDoubleError(source, handleError);
+      }
+      return result;
     },
     Primitives_objectTypeName: function(object) {
       var interceptor, interceptorConstructor, interceptorConstructorName, $name, dispatchName, objectConstructor, match, decompiledName;
@@ -5636,9 +5664,12 @@
     },
     "+double": 0,
     Duration: {
-      "^": "Object;_duration",
+      "^": "Object;_duration<",
       $add: function(_, other) {
-        return new P.Duration(C.JSInt_methods.$add(this._duration, other.get$_duration()));
+        return new P.Duration(this._duration + other.get$_duration());
+      },
+      $mul: function(_, factor) {
+        return new P.Duration(C.JSNumber_methods.round$0(this._duration * factor));
       },
       $lt: function(_, other) {
         return C.JSInt_methods.$lt(this._duration, other.get$_duration());
@@ -5823,6 +5854,16 @@
         return "Concurrent modification during iteration: " + H.S(P.Error_safeToString(t1)) + ".";
       }
     },
+    OutOfMemoryError: {
+      "^": "Object;",
+      toString$0: function(_) {
+        return "Out of Memory";
+      },
+      get$stackTrace: function() {
+        return;
+      },
+      $isError: 1
+    },
     StackOverflowError: {
       "^": "Object;",
       toString$0: function(_) {
@@ -5851,8 +5892,12 @@
     FormatException: {
       "^": "Object;message,source,offset",
       toString$0: function(_) {
-        var report = "" !== this.message ? "FormatException: " + this.message : "FormatException";
-        return report;
+        var report, source;
+        report = "" !== this.message ? "FormatException: " + this.message : "FormatException";
+        source = this.source;
+        if (source.length > 78)
+          source = C.JSString_methods.substring$2(source, 0, 75) + "...";
+        return report + "\n" + source;
       }
     },
     Expando: {
@@ -6030,7 +6075,7 @@
     },
     HtmlElement: {
       "^": "Element;",
-      "%": "HTMLAppletElement|HTMLBRElement|HTMLCanvasElement|HTMLContentElement|HTMLDListElement|HTMLDataListElement|HTMLDetailsElement|HTMLDialogElement|HTMLDirectoryElement|HTMLDivElement|HTMLEmbedElement|HTMLFontElement|HTMLFrameElement|HTMLHRElement|HTMLHeadElement|HTMLHeadingElement|HTMLHtmlElement|HTMLIFrameElement|HTMLImageElement|HTMLLIElement|HTMLLabelElement|HTMLLegendElement|HTMLMapElement|HTMLMarqueeElement|HTMLMenuElement|HTMLMetaElement|HTMLMeterElement|HTMLModElement|HTMLOListElement|HTMLObjectElement|HTMLOutputElement|HTMLParagraphElement|HTMLParamElement|HTMLPictureElement|HTMLPreElement|HTMLProgressElement|HTMLQuoteElement|HTMLScriptElement|HTMLShadowElement|HTMLSourceElement|HTMLSpanElement|HTMLTableCaptionElement|HTMLTableCellElement|HTMLTableColElement|HTMLTableDataCellElement|HTMLTableElement|HTMLTableHeaderCellElement|HTMLTableRowElement|HTMLTableSectionElement|HTMLTemplateElement|HTMLTitleElement|HTMLTrackElement|HTMLUListElement|HTMLUnknownElement|PluginPlaceholderElement;HTMLElement"
+      "%": "HTMLAppletElement|HTMLBRElement|HTMLCanvasElement|HTMLContentElement|HTMLDListElement|HTMLDataListElement|HTMLDetailsElement|HTMLDialogElement|HTMLDirectoryElement|HTMLDivElement|HTMLEmbedElement|HTMLFontElement|HTMLFrameElement|HTMLHRElement|HTMLHeadElement|HTMLHeadingElement|HTMLHtmlElement|HTMLIFrameElement|HTMLImageElement|HTMLLabelElement|HTMLLegendElement|HTMLMapElement|HTMLMarqueeElement|HTMLMenuElement|HTMLMetaElement|HTMLModElement|HTMLOListElement|HTMLObjectElement|HTMLParagraphElement|HTMLPictureElement|HTMLPreElement|HTMLQuoteElement|HTMLScriptElement|HTMLShadowElement|HTMLSourceElement|HTMLSpanElement|HTMLTableCaptionElement|HTMLTableCellElement|HTMLTableColElement|HTMLTableDataCellElement|HTMLTableElement|HTMLTableHeaderCellElement|HTMLTableRowElement|HTMLTableSectionElement|HTMLTemplateElement|HTMLTitleElement|HTMLTrackElement|HTMLUListElement|HTMLUnknownElement|PluginPlaceholderElement;HTMLElement"
     },
     AnchorElement: {
       "^": "HtmlElement;target=",
@@ -6059,7 +6104,7 @@
       "%": "HTMLBodyElement"
     },
     ButtonElement: {
-      "^": "HtmlElement;disabled}",
+      "^": "HtmlElement;disabled},value}",
       "%": "HTMLButtonElement"
     },
     CharacterData: {
@@ -6128,6 +6173,9 @@
       toString$0: function(receiver) {
         return receiver.localName;
       },
+      get$onClick: function(receiver) {
+        return H.setRuntimeTypeInfo(new W._ElementEventStreamImpl(receiver, "click", false), [null]);
+      },
       get$onInput: function(receiver) {
         return H.setRuntimeTypeInfo(new W._ElementEventStreamImpl(receiver, "input", false), [null]);
       },
@@ -6168,7 +6216,7 @@
       "%": "HTMLFormElement"
     },
     InputElement: {
-      "^": "HtmlElement;disabled}",
+      "^": "HtmlElement;disabled},value}",
       $isInputElement: 1,
       $isInterceptor: 1,
       $isEventTarget: 1,
@@ -6177,6 +6225,10 @@
     KeygenElement: {
       "^": "HtmlElement;disabled}",
       "%": "HTMLKeygenElement"
+    },
+    LIElement: {
+      "^": "HtmlElement;value}",
+      "%": "HTMLLIElement"
     },
     LinkElement: {
       "^": "HtmlElement;disabled}",
@@ -6197,6 +6249,10 @@
       "^": "HtmlElement;disabled}",
       "%": "HTMLMenuItemElement"
     },
+    MeterElement: {
+      "^": "HtmlElement;value}",
+      "%": "HTMLMeterElement"
+    },
     Navigator: {
       "^": "Interceptor;",
       $isInterceptor: 1,
@@ -6215,15 +6271,27 @@
       "%": "HTMLOptGroupElement"
     },
     OptionElement: {
-      "^": "HtmlElement;disabled}",
+      "^": "HtmlElement;disabled},value}",
       "%": "HTMLOptionElement"
+    },
+    OutputElement: {
+      "^": "HtmlElement;value}",
+      "%": "HTMLOutputElement"
+    },
+    ParamElement: {
+      "^": "HtmlElement;value}",
+      "%": "HTMLParamElement"
     },
     ProcessingInstruction: {
       "^": "CharacterData;target=",
       "%": "ProcessingInstruction"
     },
+    ProgressElement: {
+      "^": "HtmlElement;value}",
+      "%": "HTMLProgressElement"
+    },
     SelectElement: {
-      "^": "HtmlElement;disabled},length=",
+      "^": "HtmlElement;disabled},length=,value}",
       "%": "HTMLSelectElement"
     },
     SpeechRecognitionError: {
@@ -6235,7 +6303,7 @@
       "%": "HTMLStyleElement"
     },
     TextAreaElement: {
-      "^": "HtmlElement;disabled}",
+      "^": "HtmlElement;disabled},value}",
       "%": "HTMLTextAreaElement"
     },
     Window: {
@@ -6520,6 +6588,9 @@
     },
     SvgElement: {
       "^": "Element;",
+      get$onClick: function(receiver) {
+        return H.setRuntimeTypeInfo(new W._ElementEventStreamImpl(receiver, "click", false), [null]);
+      },
       get$onInput: function(receiver) {
         return H.setRuntimeTypeInfo(new W._ElementEventStreamImpl(receiver, "input", false), [null]);
       },
@@ -6801,7 +6872,9 @@
     main: [function() {
       if (!C.JSArray_methods.contains$1(["http:", "https:"], window.location.protocol))
         ;
-      $.inputValues = new Array(9);
+      var t1 = new Array(9);
+      t1.fixed$length = Array;
+      $.inputValues = t1;
       $.inputField1 = document.querySelector("#inputName1");
       $.inputField2 = document.querySelector("#inputName2");
       $.inputField3 = document.querySelector("#inputName3");
@@ -6811,7 +6884,7 @@
       $.inputField7 = document.querySelector("#inputName7");
       $.inputField8 = document.querySelector("#inputName8");
       $.inputField9 = document.querySelector("#inputName9");
-      var t1 = J.get$onInput$x($.inputField1);
+      t1 = J.get$onInput$x($.inputField1);
       H.setRuntimeTypeInfo(new W._EventStreamSubscription(0, t1._target, t1._eventType, W._wrapZone(new V.main_closure()), false), [H.getTypeArgumentByIndex(t1, 0)])._tryResume$0();
       t1 = J.get$onInput$x($.inputField2);
       H.setRuntimeTypeInfo(new W._EventStreamSubscription(0, t1._target, t1._eventType, W._wrapZone(new V.main_closure0()), false), [H.getTypeArgumentByIndex(t1, 0)])._tryResume$0();
@@ -6838,9 +6911,12 @@
       J.set$disabled$x($.inputField7, false);
       J.set$disabled$x($.inputField8, false);
       J.set$disabled$x($.inputField9, false);
-      $.convertButton = document.querySelector("#convertButton");
+      t1 = document.querySelector("#convertButton");
+      $.convertButton = t1;
+      t1 = J.get$onClick$x(t1);
+      H.setRuntimeTypeInfo(new W._EventStreamSubscription(0, t1._target, t1._eventType, W._wrapZone(V.dartrix__createREF$closure()), false), [H.getTypeArgumentByIndex(t1, 0)])._tryResume$0();
     }, "call$0", "dartrix__main$closure", 0, 0, 0],
-    updateRREF: function(e, index) {
+    updateREF: function(e, index) {
       var inputS, t1, input;
       inputS = J.trim$0$s(H.interceptedTypeCast(J.get$target$x(e), "$isInputElement").value);
       if (inputS.length === 0) {
@@ -6852,7 +6928,7 @@
         J.set$disabled$x($.convertButton, true);
         return;
       }
-      input = H.Primitives_parseInt(inputS, null, null);
+      input = H.Primitives_parseDouble(inputS, null);
       t1 = $.inputValues;
       t1.length;
       if (index >= 9)
@@ -6861,58 +6937,115 @@
       if ((t1 && C.JSArray_methods).indexOf$1(t1, null) === -1)
         J.set$disabled$x($.convertButton, false);
     },
+    createREF: [function(e) {
+      var t1, t2, t3, t4, t5, in4, in5;
+      t1 = $.inputValues;
+      t2 = t1[3];
+      t3 = t1[0];
+      if (typeof t2 !== "number")
+        return t2.$div();
+      if (typeof t3 !== "number")
+        return H.iae(t3);
+      t4 = t1[6];
+      if (typeof t4 !== "number")
+        return t4.$div();
+      t5 = -(t2 / t3);
+      t1[3] = t2 + t3 * t5;
+      t2 = $.inputValues;
+      t2[4] = J.$add$ns(t2[4], J.$mul$ns(t2[1], t5));
+      t2 = $.inputValues;
+      t2[5] = J.$add$ns(t2[5], J.$mul$ns(t2[2], t5));
+      t5 = $.inputValues;
+      t3 = -(t4 / t3);
+      t5[6] = J.$add$ns(t5[6], J.$mul$ns(t5[0], t3));
+      t5 = $.inputValues;
+      t5[7] = J.$add$ns(t5[7], J.$mul$ns(t5[1], t3));
+      t5 = $.inputValues;
+      t5[8] = J.$add$ns(t5[8], J.$mul$ns(t5[2], t3));
+      if (J.$eq$($.inputValues[4], 0) && !J.$eq$($.inputValues[7], 0)) {
+        t1 = $.inputValues;
+        in4 = t1[4];
+        in5 = t1[5];
+        t1[4] = t1[7];
+        t1[5] = t1[8];
+        t1[7] = in4;
+        t1[8] = in5;
+      }
+      if (!J.$eq$($.inputValues[4], 0)) {
+        t1 = $.inputValues;
+        t2 = t1[7];
+        t3 = t1[4];
+        if (typeof t2 !== "number")
+          return t2.$div();
+        if (typeof t3 !== "number")
+          return H.iae(t3);
+        t4 = -(t2 / t3);
+        t1[7] = t2 + t3 * t4;
+        t3 = $.inputValues;
+        t3[8] = J.$add$ns(t3[8], J.$mul$ns(t3[5], t4));
+      }
+      J.set$value$x($.inputField1, H.S($.inputValues[0]));
+      J.set$value$x($.inputField2, H.S($.inputValues[1]));
+      J.set$value$x($.inputField3, H.S($.inputValues[2]));
+      J.set$value$x($.inputField4, H.S($.inputValues[3]));
+      J.set$value$x($.inputField5, H.S($.inputValues[4]));
+      J.set$value$x($.inputField6, H.S($.inputValues[5]));
+      J.set$value$x($.inputField7, H.S($.inputValues[6]));
+      J.set$value$x($.inputField8, H.S($.inputValues[7]));
+      J.set$value$x($.inputField9, H.S($.inputValues[8]));
+    }, "call$1", "dartrix__createREF$closure", 2, 0, 14],
     main_closure: {
       "^": "Closure:3;",
       call$1: function(e) {
-        return V.updateRREF(e, 0);
+        return V.updateREF(e, 0);
       }
     },
     main_closure0: {
       "^": "Closure:3;",
       call$1: function(e) {
-        return V.updateRREF(e, 1);
+        return V.updateREF(e, 1);
       }
     },
     main_closure1: {
       "^": "Closure:3;",
       call$1: function(e) {
-        return V.updateRREF(e, 2);
+        return V.updateREF(e, 2);
       }
     },
     main_closure2: {
       "^": "Closure:3;",
       call$1: function(e) {
-        return V.updateRREF(e, 3);
+        return V.updateREF(e, 3);
       }
     },
     main_closure3: {
       "^": "Closure:3;",
       call$1: function(e) {
-        return V.updateRREF(e, 4);
+        return V.updateREF(e, 4);
       }
     },
     main_closure4: {
       "^": "Closure:3;",
       call$1: function(e) {
-        return V.updateRREF(e, 5);
+        return V.updateREF(e, 5);
       }
     },
     main_closure5: {
       "^": "Closure:3;",
       call$1: function(e) {
-        return V.updateRREF(e, 6);
+        return V.updateREF(e, 6);
       }
     },
     main_closure6: {
       "^": "Closure:3;",
       call$1: function(e) {
-        return V.updateRREF(e, 7);
+        return V.updateREF(e, 7);
       }
     },
     main_closure7: {
       "^": "Closure:3;",
       call$1: function(e) {
-        return V.updateRREF(e, 8);
+        return V.updateREF(e, 8);
       }
     }
   }, 1]];
@@ -7015,6 +7148,9 @@
   J.set$disabled$x = function(receiver, value) {
     return J.getInterceptor$x(receiver).set$disabled(receiver, value);
   };
+  J.set$value$x = function(receiver, value) {
+    return J.getInterceptor$x(receiver).set$value(receiver, value);
+  };
   J.get$error$x = function(receiver) {
     return J.getInterceptor$x(receiver).get$error(receiver);
   };
@@ -7023,6 +7159,9 @@
   };
   J.get$length$asx = function(receiver) {
     return J.getInterceptor$asx(receiver).get$length(receiver);
+  };
+  J.get$onClick$x = function(receiver) {
+    return J.getInterceptor$x(receiver).get$onClick(receiver);
   };
   J.get$onInput$x = function(receiver) {
     return J.getInterceptor$x(receiver).get$onInput(receiver);
@@ -7046,6 +7185,11 @@
     if (typeof receiver == "number" && typeof a0 == "number")
       return receiver < a0;
     return J.getInterceptor$n(receiver).$lt(receiver, a0);
+  };
+  J.$mul$ns = function(receiver, a0) {
+    if (typeof receiver == "number" && typeof a0 == "number")
+      return receiver * a0;
+    return J.getInterceptor$ns(receiver).$mul(receiver, a0);
   };
   J._addEventListener$3$x = function(receiver, a0, a1, a2) {
     return J.getInterceptor$x(receiver)._addEventListener$3(receiver, a0, a1, a2);
@@ -7089,6 +7233,7 @@
   C.PlainJavaScriptObject_methods = J.PlainJavaScriptObject.prototype;
   C.UnknownJavaScriptObject_methods = J.UnknownJavaScriptObject.prototype;
   C.C_DynamicRuntimeType = new H.DynamicRuntimeType();
+  C.C_OutOfMemoryError = new P.OutOfMemoryError();
   C.C__DelayedDone = new P._DelayedDone();
   C.C__RootZone = new P._RootZone();
   C.Duration_0 = new P.Duration(0);
@@ -7352,7 +7497,7 @@
   Isolate = Isolate.$finishIsolateConstructor(Isolate);
   $ = new Isolate();
   init.metadata = [null];
-  init.types = [{func: 1}, {func: 1, v: true}, {func: 1, args: [,]}, {func: 1, args: [W.Event]}, {func: 1, v: true, args: [{func: 1, v: true}]}, {func: 1, ret: P.String, args: [P.$int]}, {func: 1, args: [, P.String]}, {func: 1, args: [P.String]}, {func: 1, args: [{func: 1, v: true}]}, {func: 1, v: true, args: [,], opt: [P.StackTrace]}, {func: 1, args: [,], opt: [,]}, {func: 1, args: [, P.StackTrace]}, {func: 1, v: true, args: [, P.StackTrace]}, {func: 1, args: [,,]}];
+  init.types = [{func: 1}, {func: 1, v: true}, {func: 1, args: [,]}, {func: 1, args: [W.Event]}, {func: 1, v: true, args: [{func: 1, v: true}]}, {func: 1, ret: P.String, args: [P.$int]}, {func: 1, args: [, P.String]}, {func: 1, args: [P.String]}, {func: 1, args: [{func: 1, v: true}]}, {func: 1, v: true, args: [,], opt: [P.StackTrace]}, {func: 1, args: [,], opt: [,]}, {func: 1, args: [, P.StackTrace]}, {func: 1, v: true, args: [, P.StackTrace]}, {func: 1, args: [,,]}, {func: 1, v: true, args: [W.Event]}];
   function convertToFastObject(properties) {
     function MyClass() {
     }
