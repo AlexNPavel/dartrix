@@ -1,7 +1,9 @@
 //import 'dart:async';
 import 'dart:html';
 
-List<double> inputValues;
+import 'package:dartrix/matrix.dart';
+
+Matrix matrix;
 ButtonElement convertButton;
 InputElement inputField1;
 InputElement inputField2;
@@ -23,8 +25,7 @@ main() {
     protocol = 'http:';
   }
 
-  //initialize input list
-  inputValues = new List(9);
+  matrix = new Matrix(rowSize: 3, colSize: 3);
 
   // initialize the input fields
   inputField1 = querySelector('#inputName1');
@@ -64,49 +65,42 @@ main() {
 void updateREF(Event e, int index) {
   String inputS = (e.target as InputElement).value.trim();
   if (inputS.length == 0) {
-    inputValues[index] = null;
+    matrix.matrix[index ~/ 3][index%3] = null;
     convertButton.disabled = true;
     return;
   }
-  var input = double.parse(inputS);
-  inputValues[index] = input;
-  if (inputValues.indexOf(null) == -1) {
-    convertButton.disabled = false;
+  var input;
+  try {
+    input = double.parse(inputS);
+  } catch(exception) {
+    matrix.matrix[index ~/ 3][index%3] = null;
+    convertButton.disabled = true;
+    return;
   }
+  matrix.matrix[index ~/ 3][index%3] = input;
+  for (int i = 0; i < matrix.matrix.length; i++) {
+    for (int h = 0; h < matrix.matrix[i].length; h++) {
+      if (matrix.matrix[i][h] == null) {
+        return;
+      }
+    }
+  }
+  // if no values are null, enable convertButton
+  convertButton.disabled = false;
 }
 
 void createREF(Event e) {
 //  if (inputValues.indexOf(null) != -1) {
 //    return;
 //  }
-  var subVal1 = inputValues[3] / inputValues[0];
-  var subVal2 = inputValues[6] / inputValues[0];
-  inputValues[3] += inputValues[0] * -subVal1;
-  inputValues[4] += inputValues[1] * -subVal1;
-  inputValues[5] += inputValues[2] * -subVal1;
-  inputValues[6] += inputValues[0] * -subVal2;
-  inputValues[7] += inputValues[1] * -subVal2;
-  inputValues[8] += inputValues[2] * -subVal2;
-  if (inputValues[4] == 0 && inputValues[7] != 0) {
-    var in4 = inputValues[4];
-    var in5 = inputValues[5];
-    inputValues[4] = inputValues[7];
-    inputValues[5] = inputValues[8];
-    inputValues[7] = in4;
-    inputValues[8] = in5;
-  }
-  if (inputValues[4] != 0) {
-    var subVal3 = inputValues[7] / inputValues[4];
-    inputValues[7] += inputValues[4] * -subVal3;
-    inputValues[8] += inputValues[5] * -subVal3;
-  }
-  inputField1.value = '${inputValues[0]}';
-  inputField2.value = '${inputValues[1]}';
-  inputField3.value = '${inputValues[2]}';
-  inputField4.value = '${inputValues[3]}';
-  inputField5.value = '${inputValues[4]}';
-  inputField6.value = '${inputValues[5]}';
-  inputField7.value = '${inputValues[6]}';
-  inputField8.value = '${inputValues[7]}';
-  inputField9.value = '${inputValues[8]}';
+  matrix.convertREF();
+  inputField1.value = '${matrix.matrix[0][0]}';
+  inputField2.value = '${matrix.matrix[0][1]}';
+  inputField3.value = '${matrix.matrix[0][2]}';
+  inputField4.value = '${matrix.matrix[1][0]}';
+  inputField5.value = '${matrix.matrix[1][1]}';
+  inputField6.value = '${matrix.matrix[1][2]}';
+  inputField7.value = '${matrix.matrix[2][0]}';
+  inputField8.value = '${matrix.matrix[2][1]}';
+  inputField9.value = '${matrix.matrix[2][2]}';
 }
