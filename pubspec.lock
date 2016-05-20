@@ -19,12 +19,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.15.2+8"
-  browser:
-    description:
-      name: browser
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.10.0+2"
   collection:
     description:
       name: collection
