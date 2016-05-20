@@ -5,6 +5,7 @@ import 'package:dartrix/matrix.dart';
 
 Matrix matrix;
 ButtonElement convertButton;
+TableElement table;
 InputElement inputField1;
 InputElement inputField2;
 InputElement inputField3;
@@ -26,58 +27,43 @@ main() {
   }
 
   matrix = new Matrix(rowSize: 3, colSize: 3);
-
-  // initialize the input fields
-  inputField1 = querySelector('#inputName1');
-  inputField2 = querySelector('#inputName2');
-  inputField3 = querySelector('#inputName3');
-  inputField4 = querySelector('#inputName4');
-  inputField5 = querySelector('#inputName5');
-  inputField6 = querySelector('#inputName6');
-  inputField7 = querySelector('#inputName7');
-  inputField8 = querySelector('#inputName8');
-  inputField9 = querySelector('#inputName9');
-  // activate the input listeners
-  inputField1.onInput.listen((Event e) => updateREF(e, 0));
-  inputField2.onInput.listen((Event e) => updateREF(e, 1));
-  inputField3.onInput.listen((Event e) => updateREF(e, 2));
-  inputField4.onInput.listen((Event e) => updateREF(e, 3));
-  inputField5.onInput.listen((Event e) => updateREF(e, 4));
-  inputField6.onInput.listen((Event e) => updateREF(e, 5));
-  inputField7.onInput.listen((Event e) => updateREF(e, 6));
-  inputField8.onInput.listen((Event e) => updateREF(e, 7));
-  inputField9.onInput.listen((Event e) => updateREF(e, 8));
-  // enable the input fields
-  inputField1.disabled = false; //enable
-  inputField2.disabled = false; //enable
-  inputField3.disabled = false; //enable
-  inputField4.disabled = false; //enable
-  inputField5.disabled = false; //enable
-  inputField6.disabled = false; //enable
-  inputField7.disabled = false; //enable
-  inputField8.disabled = false; //enable
-  inputField9.disabled = false; //enable
+  table = new TableElement();
+  table.classes.add('matrix');
+  for (int i = 0; i < 3; i++) {
+    table.addRow();
+  }
+  for (int i = 0; i < 3; i++) {
+    for (int h = 0; h < 3; h++) {
+      table.rows[i].addCell();
+      InputElement node = new InputElement(type: 'text');
+      node.classes.add('input');
+      node.onInput.listen((Event e) => updateREF(e, i, h));
+      table.rows[i].cells[h].append(node);
+      table.rows[i].cells[h].append(new SpanElement());
+    }
+  }
+  querySelector('#matrix').append(table);
 
   convertButton = querySelector('#convertButton');
   convertButton.onClick.listen(createREF);
 }
 
-void updateREF(Event e, int index) {
+void updateREF(Event e, int row, int col) {
   String inputS = (e.target as InputElement).value.trim();
   if (inputS.length == 0) {
-    matrix.matrix[index ~/ 3][index%3] = null;
+    matrix.matrix[row][col] = null;
     convertButton.disabled = true;
     return;
   }
   var input;
   try {
     input = double.parse(inputS);
-  } catch(exception) {
-    matrix.matrix[index ~/ 3][index%3] = null;
+  } catch (exception) {
+    matrix.matrix[row][col] = null;
     convertButton.disabled = true;
     return;
   }
-  matrix.matrix[index ~/ 3][index%3] = input;
+  matrix.matrix[row][col] = input;
   for (int i = 0; i < matrix.matrix.length; i++) {
     for (int h = 0; h < matrix.matrix[i].length; h++) {
       if (matrix.matrix[i][h] == null) {
@@ -94,13 +80,10 @@ void createREF(Event e) {
 //    return;
 //  }
   matrix.convertREF();
-  inputField1.value = '${matrix.matrix[0][0]}';
-  inputField2.value = '${matrix.matrix[0][1]}';
-  inputField3.value = '${matrix.matrix[0][2]}';
-  inputField4.value = '${matrix.matrix[1][0]}';
-  inputField5.value = '${matrix.matrix[1][1]}';
-  inputField6.value = '${matrix.matrix[1][2]}';
-  inputField7.value = '${matrix.matrix[2][0]}';
-  inputField8.value = '${matrix.matrix[2][1]}';
-  inputField9.value = '${matrix.matrix[2][2]}';
+  for (int i = 0; i < matrix.matrix.length; i++) {
+    for (int h = 0; h < matrix.matrix[i].length; h++) {
+      (table.rows[i].cells[h].childNodes[0] as InputElement).value =
+          '${matrix.matrix[i][h]}';
+    }
+  }
 }
