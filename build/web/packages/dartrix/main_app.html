@@ -1,0 +1,28 @@
+<dom-module id="main-app">
+  <style>
+    :host::content paper-input,
+    paper-input {
+      --paper-input-container-focus-color: #2196f3;
+      --paper-input-container-color: #ddd;
+      text-align: center;
+      font-size: 2em;
+    }
+    paper-button {
+      font-family: inherit;
+      font-size: 14px;
+      background: #2196f3;
+      color: white;
+    }
+    #button {
+      margin: 20px auto 0;
+    }
+  </style>
+  <template>
+    <h1>Dartrix</h1>
+    <h2>WARNING: THIS APP IS IN BETA AND MAY HAVE GLITCHES!</h2>
+    <div align=center id="matrix"></div>
+    <div align=center>
+      <paper-button id="button" on-click="createREF" raised disabled>Convert to Row Echelon Form!</paper-button>
+    </div>
+  </template>
+</dom-module>
