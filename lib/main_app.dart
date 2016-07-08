@@ -43,7 +43,7 @@ class MainApp extends PolymerElement {
   @reflectable
   void updateinputs(event, [_]) {
     print('caught fire');
-    print(event);
+    print('Caught event with detail ${event.detail}');
   }
 
   @reflectable
