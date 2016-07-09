@@ -18,13 +18,10 @@
     }
   </style>
   <template>
-    <iron-meta key="inputs"></iron-meta>
-    <iron-meta key="complete"></iron-meta>
     <iron-signals on-iron-signal-minputchange="updateinputs"></iron-signals>
     <h1>Dartrix</h1>
     <h2>WARNING: THIS APP IS IN BETA AND MAY HAVE GLITCHES!</h2>
-    <!-- <div align=center id="matrix"></div> -->
-    <matrix-input-element></matrix-input-element>
+    <matrix-input-element inputs="{{inputs}}" complete="{{complete}}" name="ref"></matrix-input-element>
     <div align=center>
       <paper-button id="button" on-click="createREF" raised disabled>Convert to Row Echelon Form!</paper-button>
     </div>

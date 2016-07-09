@@ -3,13 +3,11 @@ library dart_polymer.lib.matrix_input_element;
 
 //import 'dart:async';
 import 'dart:html';
-import 'dart:async';
 
 import 'package:dartrix/matrix.dart';
 
 import 'package:polymer_elements/paper_input.dart';
 import 'package:polymer_elements/iron_input.dart';
-import 'package:polymer_elements/iron_meta.dart';
 import 'package:polymer_elements/iron_signals.dart';
 import 'package:polymer/polymer.dart';
 import 'package:web_components/web_components.dart';
@@ -22,9 +20,14 @@ TableElement table;
 class MatrixInputElement extends PolymerElement {
   MatrixInputElement.created() : super.created();
 
-  IronMeta meta = new IronMeta();
+  @property
   Map<String, List<List<double>>> inputs;
+
+  @property
   Map<String, bool> complete;
+
+  @property
+  String name;
 
   ready() {
     print("$runtimeType::ready()");
@@ -44,8 +47,6 @@ class MatrixInputElement extends PolymerElement {
     }
     // Polymer keeps stuff in the shadow dom, so we need to look in there
     $['matrix'].append(table);
-    // inputs = meta.byKey('input').getAttribute('value');
-    // complete = meta.byKey('complete').getAttribute('value');
   }
 
   void updateMVal(Event e, int row, int col) {
@@ -53,8 +54,8 @@ class MatrixInputElement extends PolymerElement {
     if (inputS.length == 0) {
       matrix.matrix[row][col] = null;
       print('firing');
-      this.fire('iron-signal',
-          detail: {'name': 'minputchange', 'data': 'false'});
+      complete[name] = false;
+      fire('iron-signal', detail: {'name': 'minputchange', 'data': name});
       return;
     }
     double input;
@@ -63,8 +64,8 @@ class MatrixInputElement extends PolymerElement {
     } catch (exception) {
       matrix.matrix[row][col] = null;
       print('firing');
-      this.fire('iron-signal',
-          detail: {'name': 'minputchange', 'data': 'false'});
+      complete[name] = false;
+      fire('iron-signal', detail: {'name': 'minputchange', 'data': name});
       return;
     }
     matrix.matrix[row][col] = input;
@@ -76,6 +77,7 @@ class MatrixInputElement extends PolymerElement {
       }
     }
     print('firing');
-    this.fire('iron-signal', detail: {'name': 'minputchange', 'data': 'true'});
+    complete[name] = true;
+    fire('iron-signal', detail: {'name': 'minputchange', 'data': name});
   }
 }
