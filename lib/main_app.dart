@@ -9,9 +9,6 @@ import 'matrix_input_element.dart';
 
 import 'package:polymer_elements/paper_button.dart';
 import 'package:polymer_elements/paper_input.dart';
-import 'package:polymer_elements/iron_input.dart';
-import 'package:polymer_elements/iron_meta.dart';
-import 'package:polymer_elements/iron_signals.dart';
 import 'package:polymer/polymer.dart';
 import 'package:web_components/web_components.dart';
 
@@ -19,31 +16,35 @@ Matrix matrix;
 PaperButton convertButton;
 TableElement table;
 
-/// Uses [PaperInput]
 /// Uses [PaperButton]
 @PolymerRegister('main-app')
 class MainApp extends PolymerElement {
   /// Constructor used to create instance of MainApp.
   MainApp.created() : super.created();
 
-  IronMeta meta = new IronMeta();
-
+  @property
   Map<String, List<List<double>>> inputs =
       new Map<String, List<List<double>>>();
+
+  @property
   Map<String, bool> complete = new Map<String, bool>();
 
   ready() {
-    meta.key = 'input';
-    meta.value = inputs;
-    meta.key = 'complete';
-    meta.value = complete;
     convertButton = querySelector('#button');
   }
+
+// property changes are non-bubbling, so we don't see anything here :(
+// use iron-signals as workaround as it spreads though entirty of DOM
+//  @Listen('on-complete-changed')
+//  void check(Event e, [_]) {
+//    print('complete changed');
+//  }
 
   @reflectable
   void updateinputs(event, [_]) {
     print('caught fire');
     print('Caught event with detail ${event.detail}');
+    print('Complete ref is ${complete[event.detail as String]}');
   }
 
   @reflectable
