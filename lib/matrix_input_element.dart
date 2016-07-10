@@ -4,15 +4,12 @@ library dart_polymer.lib.matrix_input_element;
 //import 'dart:async';
 import 'dart:html';
 
-import 'package:dartrix/matrix.dart';
-
 import 'package:polymer_elements/paper_input.dart';
 import 'package:polymer_elements/iron_input.dart';
 import 'package:polymer_elements/iron_signals.dart';
 import 'package:polymer/polymer.dart';
 import 'package:web_components/web_components.dart';
 
-Matrix matrix;
 TableElement table;
 
 /// Uses [PaperInput]
@@ -31,11 +28,14 @@ class MatrixInputElement extends PolymerElement {
 
   ready() {
     print("$runtimeType::ready()");
-    matrix = new Matrix(rowSize: 3, colSize: 3);
+    inputs[name] = [];
+    inputs[name].length = 3;
     table = new TableElement();
     table.classes.add('matrix');
     for (int i = 0; i < 3; i++) {
       table.addRow();
+      inputs[name][i] = [];
+      inputs[name][i].length = 3;
     }
     for (int i = 0; i < 3; i++) {
       for (int h = 0; h < 3; h++) {
@@ -52,7 +52,7 @@ class MatrixInputElement extends PolymerElement {
   void updateMVal(Event e, int row, int col) {
     String inputS = (e.target as IronInput).value.trim();
     if (inputS.length == 0) {
-      matrix.matrix[row][col] = null;
+      inputs[name][row][col] = null;
       print('firing');
       complete[name] = false;
       fire('iron-signal', detail: {'name': 'minputchange', 'data': name});
@@ -62,16 +62,16 @@ class MatrixInputElement extends PolymerElement {
     try {
       input = double.parse(inputS);
     } catch (exception) {
-      matrix.matrix[row][col] = null;
+      inputs[name][row][col] = null;
       print('firing');
       complete[name] = false;
       fire('iron-signal', detail: {'name': 'minputchange', 'data': name});
       return;
     }
-    matrix.matrix[row][col] = input;
-    for (int i = 0; i < matrix.matrix.length; i++) {
-      for (int h = 0; h < matrix.matrix[i].length; h++) {
-        if (matrix.matrix[i][h] == null) {
+    inputs[name][row][col] = input;
+    for (int i = 0; i < inputs[name].length; i++) {
+      for (int h = 0; h < inputs[name][i].length; h++) {
+        if (inputs[name][i][h] == null) {
           return;
         }
       }
