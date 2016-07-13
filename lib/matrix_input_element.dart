@@ -27,7 +27,6 @@ class MatrixInputElement extends PolymerElement {
   String name;
 
   ready() {
-    print("$runtimeType::ready()");
     inputs[name] = [];
     inputs[name].length = 3;
     table = new TableElement();
@@ -53,7 +52,6 @@ class MatrixInputElement extends PolymerElement {
     String inputS = (e.target as IronInput).value.trim();
     if (inputS.length == 0) {
       inputs[name][row][col] = null;
-      print('firing');
       complete[name] = false;
       fire('iron-signal', detail: {'name': 'minputchange', 'data': name});
       return;
@@ -63,7 +61,6 @@ class MatrixInputElement extends PolymerElement {
       input = double.parse(inputS);
     } catch (exception) {
       inputs[name][row][col] = null;
-      print('firing');
       complete[name] = false;
       fire('iron-signal', detail: {'name': 'minputchange', 'data': name});
       return;
@@ -76,7 +73,6 @@ class MatrixInputElement extends PolymerElement {
         }
       }
     }
-    print('firing');
     complete[name] = true;
     fire('iron-signal', detail: {'name': 'minputchange', 'data': name});
   }

@@ -1,0 +1,11 @@
+<dom-module id="matrix-element">
+  <style>
+    :host {
+      display: inline-block;
+    }
+  </style>
+  <template>
+    <div align=center id="matrix"></div>
+    <iron-signals on-iron-signal-tablechange="updateMatrix"></iron-signals>
+  </template>
+</dom-module>
