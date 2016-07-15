@@ -58,6 +58,7 @@ class MainApp extends PolymerElement {
       }
     }
     matrix.convertREF();
+    ref.clear();
     for (int i = 0; i < matrix.matrix.length; i++) {
       ref.insert(i, []);
       for (int h = 0; h < matrix.matrix[i].length; h++) {
