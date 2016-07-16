@@ -50,7 +50,6 @@ class Matrix {
         matrix[focusRow] = temp;
       }
       for (int i = focusRow + 1; i < matrix.length; i++) {
-        print('focusRow: {$focusRow}, focusCol{$focusCol}');
         addRow(matrix[focusRow], matrix[i],
             -matrix[i][focusCol] / matrix[focusRow][focusCol]);
       }
