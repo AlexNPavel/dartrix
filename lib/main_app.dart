@@ -75,7 +75,6 @@ class MainApp extends PolymerElement {
     }
     fire('iron-signal', detail: {'name': 'tablechange', 'data': 'ref'});
     querySelector('#refmat').hidden = false;
-    querySelector('#rrefmat').hidden = false;
   }
 
   @reflectable

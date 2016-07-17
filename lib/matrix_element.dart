@@ -7,12 +7,12 @@ import 'package:polymer/polymer.dart';
 import 'package:polymer_elements/paper_input.dart';
 import 'package:web_components/web_components.dart';
 
-TableElement table;
-
 /// Uses [PaperInput]
 @PolymerRegister('matrix-element')
 class MatrixElement extends PolymerElement {
   MatrixElement.created() : super.created();
+
+  TableElement table;
 
   @property
   List<List<double>> data;
@@ -30,7 +30,7 @@ class MatrixElement extends PolymerElement {
       for (int h = 0; h < 3; h++) {
         table.rows[i].addCell();
         PaperInput node = new PaperInput();
-        node.value = 'test';
+        node.value = '$name';
         node.readonly = true;
         table.rows[i].cells[h].append(node);
       }
@@ -42,17 +42,12 @@ class MatrixElement extends PolymerElement {
   @reflectable
   void updateMatrix(event, [_]) {
     if (event.detail != name) {
-      print(
-          'wrong name; received name was ${event.detail}; element name is $name');
       return;
     }
-    print('correct name received $name');
     for (int i = 0; i < data.length; i++) {
       for (int h = 0; h < data[i].length; h++) {
-        print('old node value is ${(table.rows[i].cells[h].firstChild as PaperInput).value}');
         (table.rows[i].cells[h].firstChild as PaperInput).value =
             '${data[i][h]}';
-        print('node value is ${(table.rows[i].cells[h].firstChild as PaperInput).value}');
       }
     }
   }
