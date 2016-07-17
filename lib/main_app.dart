@@ -13,7 +13,7 @@ import 'package:polymer_elements/paper_input.dart';
 import 'package:polymer/polymer.dart';
 import 'package:web_components/web_components.dart';
 
-Matrix matrix;
+Matrix matrixA;
 PaperButton convertButton;
 TableElement table;
 
@@ -33,6 +33,9 @@ class MainApp extends PolymerElement {
   @property
   List<List<double>> ref = [];
 
+  @property
+  List<List<double>> rref = [];
+
   ready() {
     convertButton = querySelector('#button');
   }
@@ -51,18 +54,18 @@ class MainApp extends PolymerElement {
 //  if (inputValues.indexOf(null) != -1) {
 //    return;
 //  }
-    matrix = new Matrix();
+    matrixA = new Matrix();
     for (int i = 0; i < inputs['ref'].length; i++) {
       for (int h = 0; h < inputs['ref'][i].length; h++) {
-        matrix.matrix[i][h] = inputs['ref'][i][h];
+        matrixA.matrix[i][h] = inputs['ref'][i][h];
       }
     }
-    matrix.convertREF();
+    matrixA.convertREF();
     ref.clear();
-    for (int i = 0; i < matrix.matrix.length; i++) {
+    for (int i = 0; i < matrixA.matrix.length; i++) {
       ref.insert(i, []);
-      for (int h = 0; h < matrix.matrix[i].length; h++) {
-        ref[i].insert(h, matrix.matrix[i][h]);
+      for (int h = 0; h < matrixA.matrix[i].length; h++) {
+        ref[i].insert(h, matrixA.matrix[i][h]);
       }
     }
     fire('iron-signal', detail: {'name': 'tablechange', 'data': 'ref'});
