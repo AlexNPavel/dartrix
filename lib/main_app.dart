@@ -82,7 +82,6 @@ class MainApp extends PolymerElement {
 //  if (inputValues.indexOf(null) != -1) {
 //    return;
 //  }
-    matrixA = new Matrix();
     for (int i = 0; i < inputs['rref'].length; i++) {
       for (int h = 0; h < inputs['rref'][i].length; h++) {
         matrixA.matrix[i][h] = inputs['rref'][i][h];
@@ -92,8 +91,8 @@ class MainApp extends PolymerElement {
     rref.clear();
     for (int i = 0; i < matrixA.matrix.length; i++) {
       rref.insert(i, []);
-      for (int h = 0; h < matrixA.matrix[i].length; h++) {
-        rref[i].insert(h, matrixA.matrix[i][h]);
+      for (int h = 0; h < matrixA.rref[i].length; h++) {
+        rref[i].insert(h, matrixA.rref[i][h]);
       }
     }
     fire('iron-signal', detail: {'name': 'tablechange', 'data': 'rref'});

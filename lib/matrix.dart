@@ -90,7 +90,9 @@ class Matrix {
       return;
     }
     for (int i = 0; i < row.length; i++) {
+      print('row[$i] was ${row[i]}');
       row[i] /= scale;
+      print('row[$i] is now ${row[i]}');
     }
   }
 
@@ -98,19 +100,25 @@ class Matrix {
     if (ref.length != matrix.length) {
       convertREF();
     }
+    rref.length = ref.length;
     for (int i = 0; i < ref.length; i++) {
+      rref[i] = [];
       rref[i].length = ref[i].length;
-      for (int h = 0; h < ref[i].length; i++) {
+      for (int h = 0; h < ref[i].length; h++) {
         rref[i][h] = ref[i][h];
       }
     }
     for (int i = rref.length - 1; i >= 0; i--) {
       int h;
-      for (h = 0; h < rref.length && rref[h] == 0; h++) {}
+      for (h = 0; h < rref.length - 1 && rref[i][h] == 0; h++) {}
+      print('h is $h when i is $i');
       scaleRow(rref[i], rref[i][h]);
       int j;
       for (j = i - 1; j >= 0; j--) {
-        addRow(rref[i], rref[j], -rref[j][h] / rref[i][h]);
+        print('scale is ${-rref[j][h] / rref[i][h]}');
+        if (rref[i][h] != 0) {
+          addRow(rref[i], rref[j], -rref[j][h] / rref[i][h]);
+        }
       }
     }
   }
