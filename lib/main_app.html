@@ -23,8 +23,10 @@
     <h2>WARNING: THIS APP IS IN BETA AND MAY HAVE GLITCHES!</h2>
     <matrix-input-element inputs="{{inputs}}" complete="{{complete}}" name="ref"></matrix-input-element>
     <div align=center>
-      <paper-button id="button" on-click="createREF" raised disabled>Convert to Row Echelon Form!</paper-button>
+      <paper-button id="refbutton" on-click="createREF" raised disabled>Convert to Row Echelon Form!</paper-button>
+      <paper-button id="rrefbutton" on-click="createRREF" raised disabled>Convert to Reduced Row Echelon Form!</paper-button>
     </div>
     <matrix-element id="refmat" data="{{ref}}" name="ref" hidden></matrix-element>
+    <matrix-element id="rrefmat" data="{{rref}}" name="rref" hidden></matrix-element>
   </template>
 </dom-module>

@@ -14,7 +14,7 @@ import 'package:polymer/polymer.dart';
 import 'package:web_components/web_components.dart';
 
 Matrix matrixA;
-PaperButton convertButton;
+PaperButton refButton, rrefButton;
 TableElement table;
 
 /// Uses [PaperButton]
@@ -36,16 +36,22 @@ class MainApp extends PolymerElement {
   @property
   List<List<double>> rref = [];
 
+  Map<String, PaperButton> buttons = new Map<String, PaperButton>();
+
   ready() {
-    convertButton = querySelector('#button');
+    refButton = querySelector('#refbutton');
+    buttons['ref'] = refButton;
+    rrefButton = querySelector('#rrefbutton');
+    buttons['rref'] = rrefButton;
+    matrixA = new Matrix();
   }
 
   @reflectable
   void updateinputs(event, [_]) {
     if (complete[event.detail as String] == true) {
-      convertButton.disabled = false;
+      buttons[event.detail as String].disabled = false;
     } else {
-      convertButton.disabled = true;
+      buttons[event.detail as String].disabled = true;
     }
   }
 
@@ -54,7 +60,6 @@ class MainApp extends PolymerElement {
 //  if (inputValues.indexOf(null) != -1) {
 //    return;
 //  }
-    matrixA = new Matrix();
     for (int i = 0; i < inputs['ref'].length; i++) {
       for (int h = 0; h < inputs['ref'][i].length; h++) {
         matrixA.matrix[i][h] = inputs['ref'][i][h];
@@ -65,10 +70,34 @@ class MainApp extends PolymerElement {
     for (int i = 0; i < matrixA.matrix.length; i++) {
       ref.insert(i, []);
       for (int h = 0; h < matrixA.matrix[i].length; h++) {
-        ref[i].insert(h, matrixA.matrix[i][h]);
+        ref[i].insert(h, matrixA.ref[i][h]);
       }
     }
     fire('iron-signal', detail: {'name': 'tablechange', 'data': 'ref'});
     querySelector('#refmat').hidden = false;
+    querySelector('#rrefmat').hidden = false;
+  }
+
+  @reflectable
+  void createRREF(event, [_]) {
+//  if (inputValues.indexOf(null) != -1) {
+//    return;
+//  }
+    matrixA = new Matrix();
+    for (int i = 0; i < inputs['rref'].length; i++) {
+      for (int h = 0; h < inputs['rref'][i].length; h++) {
+        matrixA.matrix[i][h] = inputs['rref'][i][h];
+      }
+    }
+    matrixA.convertRREF();
+    rref.clear();
+    for (int i = 0; i < matrixA.matrix.length; i++) {
+      rref.insert(i, []);
+      for (int h = 0; h < matrixA.matrix[i].length; h++) {
+        rref[i].insert(h, matrixA.matrix[i][h]);
+      }
+    }
+    fire('iron-signal', detail: {'name': 'tablechange', 'data': 'rref'});
+    querySelector('#rrefmat').hidden = false;
   }
 }

@@ -45,8 +45,9 @@ class Matrix {
   void convertREF() {
     ref.length = matrix.length;
     for (int i = 0; i < matrix.length; i++) {
+      ref[i] = [];
       ref[i].length = matrix[i].length;
-      for (int h = 0; h < matrix[i].length; i++) {
+      for (int h = 0; h < matrix[i].length; h++) {
         ref[i][h] = matrix[i][h];
       }
     }
