@@ -89,16 +89,13 @@ class Matrix {
 
   void scaleRow(List<double> row, double scale) {
     if (scale == 0) {
-      print('Divide by zero on scaleRow!!');
       return;
     }
     for (int i = 0; i < row.length; i++) {
-      print('row[$i] was ${row[i]}');
       row[i] /= scale;
       if (row[i] == 0 && row[i].isNegative) {
         row[i] = 0.toDouble();
       }
-      print('row[$i] is now ${row[i]}');
     }
   }
 
@@ -117,11 +114,9 @@ class Matrix {
     for (int i = rref.length - 1; i >= 0; i--) {
       int h;
       for (h = 0; h < rref.length - 1 && rref[i][h] == 0; h++) {}
-      print('h is $h when i is $i');
       scaleRow(rref[i], rref[i][h]);
       int j;
       for (j = i - 1; j >= 0; j--) {
-        print('scale is ${-rref[j][h] / rref[i][h]}');
         if (rref[i][h] != 0) {
           addRow(rref[i], rref[j], -rref[j][h] / rref[i][h]);
         }
