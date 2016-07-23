@@ -35,11 +35,18 @@ class Matrix {
   }
 
   void randomize({maxInt: 10}) {
+    ref = [];
+    rref = [];
     for (int i = 0; i < matrix.length; i++) {
       for (int h = 0; h < matrix[i].length; h++) {
         matrix[i][h] = new Random.secure().nextInt(10).toDouble();
       }
     }
+  }
+
+  void calculateAll() {
+    convertREF();
+    convertRREF();
   }
 
   void convertREF() {
@@ -117,6 +124,7 @@ class Matrix {
       scaleRow(rref[i], rref[i][h]);
       int j;
       for (j = i - 1; j >= 0; j--) {
+        print('scale is ${-rref[j][h] / rref[i][h]}');
         if (rref[i][h] != 0) {
           addRow(rref[i], rref[j], -rref[j][h] / rref[i][h]);
         }
