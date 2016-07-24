@@ -13,7 +13,6 @@ import 'package:polymer_elements/paper_input.dart';
 import 'package:polymer/polymer.dart';
 import 'package:web_components/web_components.dart';
 
-Matrix matrixA;
 PaperButton refButton, rrefButton;
 TableElement table;
 
@@ -23,12 +22,17 @@ class MainApp extends PolymerElement {
   /// Constructor used to create instance of MainApp.
   MainApp.created() : super.created();
 
+  Matrix matrixA = new Matrix();
+
   @property
   Map<String, List<List<double>>> inputs =
       new Map<String, List<List<double>>>();
 
   @property
   Map<String, bool> complete = new Map<String, bool>();
+
+  @property
+  List<List<double>> mainA = [];
 
   @property
   List<List<double>> ref = [];
@@ -43,7 +47,16 @@ class MainApp extends PolymerElement {
     buttons['ref'] = refButton;
     rrefButton = querySelector('#rrefbutton');
     buttons['rref'] = rrefButton;
-    matrixA = new Matrix();
+    matrixA.randomize();
+//    matrixA.calculateAll();
+    for (int i = 0; i < matrixA.matrix.length; i++) {
+      mainA.insert(i, []);
+      for (int h = 0; h < matrixA.matrix[i].length; h++) {
+        mainA[i].insert(h, matrixA.matrix[i][h]);
+      }
+    }
+    print(mainA);
+    fire('iron-signal', detail: {'name': 'tablechange', 'data': 'mainA'});
   }
 
   @reflectable
@@ -60,6 +73,7 @@ class MainApp extends PolymerElement {
 //  if (inputValues.indexOf(null) != -1) {
 //    return;
 //  }
+/*
     for (int i = 0; i < inputs['ref'].length; i++) {
       for (int h = 0; h < inputs['ref'][i].length; h++) {
         matrixA.matrix[i][h] = inputs['ref'][i][h];
@@ -75,6 +89,8 @@ class MainApp extends PolymerElement {
     }
     fire('iron-signal', detail: {'name': 'tablechange', 'data': 'ref'});
     querySelector('#refmat').hidden = false;
+    */
+    querySelector('#ref-correct').classes.toggle('fade-in', true);
   }
 
   @reflectable
@@ -82,6 +98,7 @@ class MainApp extends PolymerElement {
 //  if (inputValues.indexOf(null) != -1) {
 //    return;
 //  }
+/*
     for (int i = 0; i < inputs['rref'].length; i++) {
       for (int h = 0; h < inputs['rref'][i].length; h++) {
         matrixA.matrix[i][h] = inputs['rref'][i][h];
@@ -97,5 +114,7 @@ class MainApp extends PolymerElement {
     }
     fire('iron-signal', detail: {'name': 'tablechange', 'data': 'rref'});
     querySelector('#rrefmat').hidden = false;
+    */
+    querySelector('#rref-correct').classes.toggle('fade-in', true);
   }
 }

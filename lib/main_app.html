@@ -13,6 +13,15 @@
       background: #2196f3;
       color: white;
     }
+    .mat-group {
+      display: flex;
+      align-items: center;
+      margin-bottom: 4em;
+    }
+    .correct {
+      display: flex;
+      align-items: center;
+    }
     #button {
       margin: 20px auto 0;
     }
@@ -21,13 +30,25 @@
     <iron-signals on-iron-signal-minputchange="updateinputs"></iron-signals>
     <h1>Dartrix</h1>
     <h2>WARNING: THIS APP IS IN BETA AND MAY HAVE GLITCHES!</h2>
-    <matrix-input-element inputs="{{inputs}}" complete="{{complete}}" name="ref"></matrix-input-element>
-    <matrix-input-element inputs="{{inputs}}" complete="{{complete}}" name="rref"></matrix-input-element>
+    <matrix-element id="mainA" data="{{mainA}}" name="mainA"></matrix-element>
     <div align=center>
-      <paper-button id="refbutton" on-click="createREF" raised disabled>Convert to Row Echelon Form!</paper-button>
-      <paper-button id="rrefbutton" on-click="createRREF" raised disabled>Convert to Reduced Row Echelon Form!</paper-button>
     </div>
-    <matrix-element id="refmat" data="{{ref}}" name="ref" hidden></matrix-element>
-    <matrix-element id="rrefmat" data="{{rref}}" name="rref" hidden></matrix-element>
+    <div class="mat-group">
+      <div style="float:left">
+        <h3>Answer for Row Echelon Form:</h3>
+        <paper-button id="refbutton" on-click="createREF" style="float:left;margin-right=2em"raised disabled>Check</paper-button>
+        <h3 id="ref-correct" style="opacity:0">Correct!</h3>
+      </div>
+      <div style="float:left; margin-left:4em"><matrix-input-element inputs="{{inputs}}" complete="{{complete}}" name="ref"></matrix-input-element></div>
+    </div>
+    <div class="mat-group">
+      <div style="float:left">
+        <h3>Answer for Reduced Row Echelon Form:</h3>
+        <paper-button id="rrefbutton" on-click="createRREF" raised disabled>Check</paper-button>
+        <h3 id="rref-correct" style="opacity:0">Correct!</h3>
+      </div>
+      <div style="float:left; margin-left:4em"><matrix-input-element inputs="{{inputs}}" complete="{{complete}}" name="rref"></matrix-input-element></div>
+    </div>
+    <!-- <div style="clear: both;"\> -->
   </template>
 </dom-module>
