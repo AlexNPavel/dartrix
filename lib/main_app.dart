@@ -55,7 +55,6 @@ class MainApp extends PolymerElement {
         mainA[i].insert(h, matrixA.matrix[i][h]);
       }
     }
-    print(mainA);
     fire('iron-signal', detail: {'name': 'tablechange', 'data': 'mainA'});
   }
 
