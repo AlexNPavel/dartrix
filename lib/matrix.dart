@@ -17,6 +17,20 @@ class Matrix {
     matrix.forEach((List l) => l.length = colSize);
   }
 
+  bool equals(List<List<double>> other) {
+    if (matrix.length != other.length || matrix[0].length != other[0].length) {
+      return false;
+    }
+    for (int i = 0; i < matrix.length; i++) {
+      for (int h = 0; h < matrix[i].length; h++) {
+        if (matrix[i][h] != other[i][h]) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
   void setRowSize(int rows) {
     var change = -1;
     if (rows > rowSize) {
