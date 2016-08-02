@@ -21,6 +21,7 @@
     .correct {
       display: flex;
       align-items: center;
+      margin: 0 auto;
     }
     #button {
       margin: 20px auto 0;
@@ -36,16 +37,24 @@
     <div class="mat-group">
       <div style="float:left">
         <h3>Answer for Row Echelon Form:</h3>
-        <paper-button id="refbutton" on-click="createREF" style="float:left;margin-right=2em"raised disabled>Check</paper-button>
-        <h3 id="ref-correct" style="opacity:0">Correct!</h3>
+        <div class="correct">
+          <paper-button id="refbutton" on-click="createREF" style="float:left;margin-right=2em"raised disabled>Check</paper-button>
+          <div style="text-align: center; margin: 0 auto">
+            <h3 id="ref-correct" style="opacity:0">Correct!</h3>
+          </div>
+        </div>
       </div>
       <div style="float:left; margin-left:4em"><matrix-input-element inputs="{{inputs}}" complete="{{complete}}" name="ref"></matrix-input-element></div>
     </div>
     <div class="mat-group">
       <div style="float:left">
         <h3>Answer for Reduced Row Echelon Form:</h3>
-        <paper-button id="rrefbutton" on-click="createRREF" raised disabled>Check</paper-button>
-        <h3 id="rref-correct" style="opacity:0">Correct!</h3>
+        <div class="correct">
+          <paper-button id="rrefbutton" on-click="createRREF" raised disabled>Check</paper-button>
+          <div style="text-align: center; margin: 0 auto">
+            <h3 id="rref-correct" style="opacity:0">Correct!</h3>
+          </div>
+        </div>
       </div>
       <div style="float:left; margin-left:4em"><matrix-input-element inputs="{{inputs}}" complete="{{complete}}" name="rref"></matrix-input-element></div>
     </div>
