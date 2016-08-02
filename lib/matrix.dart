@@ -124,7 +124,6 @@ class Matrix {
       scaleRow(rref[i], rref[i][h]);
       int j;
       for (j = i - 1; j >= 0; j--) {
-        print('scale is ${-rref[j][h] / rref[i][h]}');
         if (rref[i][h] != 0) {
           addRow(rref[i], rref[j], -rref[j][h] / rref[i][h]);
         }
