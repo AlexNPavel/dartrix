@@ -20,7 +20,7 @@ class MatrixElement extends PolymerElement {
   @property
   String name;
 
-  ready() {
+  void ready() {
     table = new TableElement();
     table.classes.add('matrix');
     for (int i = 0; i < 3; i++) {

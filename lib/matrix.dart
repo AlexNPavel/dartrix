@@ -71,7 +71,7 @@ class Matrix {
             scanRow = focusRow;
           }
         }
-        List temp = ref[scanRow];
+        List<double> temp = ref[scanRow];
         ref[scanRow] = ref[focusRow];
         ref[focusRow] = temp;
       }

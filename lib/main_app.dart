@@ -42,7 +42,7 @@ class MainApp extends PolymerElement {
 
   Map<String, PaperButton> buttons = new Map<String, PaperButton>();
 
-  ready() {
+  void ready() {
     refButton = querySelector('#refbutton');
     buttons['ref'] = refButton;
     rrefButton = querySelector('#rrefbutton');

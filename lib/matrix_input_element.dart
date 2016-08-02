@@ -26,7 +26,7 @@ class MatrixInputElement extends PolymerElement {
   @property
   String name;
 
-  ready() {
+  void ready() {
     inputs[name] = [];
     inputs[name].length = 3;
     table = new TableElement();
