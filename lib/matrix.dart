@@ -64,6 +64,7 @@ class Matrix {
   }
 
   void convertREF() {
+    ref.clear();
     ref.length = matrix.length;
     for (int i = 0; i < matrix.length; i++) {
       ref[i] = [];
@@ -89,6 +90,7 @@ class Matrix {
         ref[scanRow] = ref[focusRow];
         ref[focusRow] = temp;
       }
+      scaleRow(ref[focusRow], ref[focusRow][focusCol]);
       for (int i = focusRow + 1; i < ref.length; i++) {
         addRow(
             ref[focusRow], ref[i], -ref[i][focusCol] / ref[focusRow][focusCol]);
@@ -124,6 +126,7 @@ class Matrix {
     if (ref.length != matrix.length) {
       convertREF();
     }
+    rref.clear();
     rref.length = ref.length;
     for (int i = 0; i < ref.length; i++) {
       rref[i] = [];

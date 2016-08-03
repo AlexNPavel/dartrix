@@ -69,10 +69,6 @@ class MainApp extends PolymerElement {
 
   @reflectable
   void createREF(event, [_]) {
-//  if (inputValues.indexOf(null) != -1) {
-//    return;
-//  }
-/*
     for (int i = 0; i < inputs['ref'].length; i++) {
       for (int h = 0; h < inputs['ref'][i].length; h++) {
         matrixA.matrix[i][h] = inputs['ref'][i][h];
@@ -86,18 +82,16 @@ class MainApp extends PolymerElement {
         ref[i].insert(h, matrixA.ref[i][h]);
       }
     }
-    fire('iron-signal', detail: {'name': 'tablechange', 'data': 'ref'});
-    querySelector('#refmat').hidden = false;
-    */
+    if (matrixA.equals(ref)) {
+      querySelector('#ref-correct').text = 'Correct!';
+    } else {
+      querySelector('#ref-correct').text = 'Incorrect!';
+    }
     querySelector('#ref-correct').classes.toggle('fade-in', true);
   }
 
   @reflectable
   void createRREF(event, [_]) {
-//  if (inputValues.indexOf(null) != -1) {
-//    return;
-//  }
-/*
     for (int i = 0; i < inputs['rref'].length; i++) {
       for (int h = 0; h < inputs['rref'][i].length; h++) {
         matrixA.matrix[i][h] = inputs['rref'][i][h];
@@ -111,9 +105,11 @@ class MainApp extends PolymerElement {
         rref[i].insert(h, matrixA.rref[i][h]);
       }
     }
-    fire('iron-signal', detail: {'name': 'tablechange', 'data': 'rref'});
-    querySelector('#rrefmat').hidden = false;
-    */
+    if (matrixA.equals(rref)) {
+      querySelector('#rref-correct').text = 'Correct!';
+    } else {
+      querySelector('#rref-correct').text = 'Incorrect!';
+    }
     querySelector('#rref-correct').classes.toggle('fade-in', true);
   }
 }
