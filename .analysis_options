@@ -4,6 +4,8 @@ meta:
 
 analyzer:
   strong-mode: true
+  exclude:
+    - build
 
 linter:
   rules:
