@@ -10177,6 +10177,7 @@
             if (h >= t1.length)
               return H.ioore(t1, h);
             J.set$value$x(H.interceptedTypeCast(t1[h].firstChild, "$isPaperInput"), H.S(J.$index$asx(J.$index$asx(receiver.$$MatrixElement_data, i), h)));
+            H.printString("Running!");
             ++h;
           }
           ++i;

@@ -48,6 +48,7 @@ class MatrixElement extends PolymerElement {
       for (int h = 0; h < data[i].length; h++) {
         (table.rows[i].cells[h].firstChild as PaperInput).value =
             '${data[i][h]}';
+        print('Running!');
       }
     }
   }
