@@ -14,10 +14,10 @@
 #  Convention is to use extension '.dart.js' for Dart compiled to Javascript to
 #  differentiate from explicit Javascript files)
 # *.dart.js
-*.part.js
-*.js.deps
-*.js.map
-*.info.json
+#*.part.js
+#*.js.deps
+#*.js.map
+#*.info.json
 
 # Directory created by dartdoc
 doc/api/
