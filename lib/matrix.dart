@@ -17,15 +17,19 @@ class Matrix {
     matrix.forEach((List l) => l.length = colSize);
   }
 
-  bool equals(List<List<double>> other) {
-    if (matrix.length != other.length || matrix[0].length != other[0].length) {
+  static bool equals(List<List<double>> correct, List<List<double>> check) {
+    if (correct.length != check.length || correct[0].length != check[0].length) {
       return false;
     }
-    for (int i = 0; i < matrix.length; i++) {
-      for (int h = 0; h < matrix[i].length; h++) {
-        if (matrix[i][h] != other[i][h]) {
+    print('Matrix is: $correct and check is $check');
+    for (int i = 0; i < correct.length; i++) {
+      for (int h = 0; h < correct[i].length; h++) {
+        print('Comparing ${correct[i][h]} to ${check[i][h]}');
+        if (correct[i][h] != check[i][h]) {
+          print('Was false');
           return false;
         }
+        print('Was true');
       }
     }
     return true;

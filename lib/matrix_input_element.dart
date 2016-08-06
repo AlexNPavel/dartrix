@@ -57,9 +57,26 @@ class MatrixInputElement extends PolymerElement {
       return;
     }
     double input;
-    try {
-      input = double.parse(inputS);
-    } catch (exception) {
+    if (inputS.split("/").length == 1) {
+      try {
+        input = double.parse(inputS);
+      } catch (exception) {
+        inputs[name][row][col] = null;
+        complete[name] = false;
+        fire('iron-signal', detail: {'name': 'minputchange', 'data': name});
+        return;
+      }
+    } else if (inputS.split("/").length == 2) {
+      try {
+        input = double.parse(inputS.split("/")[0]) /
+            double.parse(inputS.split("/")[1]);
+      } catch (exception) {
+        inputs[name][row][col] = null;
+        complete[name] = false;
+        fire('iron-signal', detail: {'name': 'minputchange', 'data': name});
+        return;
+      }
+    } else {
       inputs[name][row][col] = null;
       complete[name] = false;
       fire('iron-signal', detail: {'name': 'minputchange', 'data': name});

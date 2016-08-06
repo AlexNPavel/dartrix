@@ -69,20 +69,15 @@ class MainApp extends PolymerElement {
 
   @reflectable
   void createREF(event, [_]) {
-    for (int i = 0; i < inputs['ref'].length; i++) {
-      for (int h = 0; h < inputs['ref'][i].length; h++) {
-        matrixA.matrix[i][h] = inputs['ref'][i][h];
-      }
-    }
     matrixA.convertREF();
     ref.clear();
-    for (int i = 0; i < matrixA.matrix.length; i++) {
+    for (int i = 0; i < inputs['ref'].length; i++) {
       ref.insert(i, []);
-      for (int h = 0; h < matrixA.matrix[i].length; h++) {
-        ref[i].insert(h, matrixA.ref[i][h]);
+      for (int h = 0; h < inputs['ref'][i].length; h++) {
+        ref[i].insert(h, inputs['ref'][i][h]);
       }
     }
-    if (matrixA.equals(ref)) {
+    if (Matrix.equals(matrixA.ref, ref)) {
       querySelector('#ref-correct').text = 'Correct!';
     } else {
       querySelector('#ref-correct').text = 'Incorrect!';
@@ -92,20 +87,15 @@ class MainApp extends PolymerElement {
 
   @reflectable
   void createRREF(event, [_]) {
-    for (int i = 0; i < inputs['rref'].length; i++) {
-      for (int h = 0; h < inputs['rref'][i].length; h++) {
-        matrixA.matrix[i][h] = inputs['rref'][i][h];
-      }
-    }
     matrixA.convertRREF();
     rref.clear();
-    for (int i = 0; i < matrixA.matrix.length; i++) {
+    for (int i = 0; i < inputs['rref'].length; i++) {
       rref.insert(i, []);
-      for (int h = 0; h < matrixA.rref[i].length; h++) {
-        rref[i].insert(h, matrixA.rref[i][h]);
+      for (int h = 0; h < inputs['rref'][i].length; h++) {
+        rref[i].insert(h, inputs['rref'][i][h]);
       }
     }
-    if (matrixA.equals(rref)) {
+    if (Matrix.equals(matrixA.rref, rref)) {
       querySelector('#rref-correct').text = 'Correct!';
     } else {
       querySelector('#rref-correct').text = 'Incorrect!';
