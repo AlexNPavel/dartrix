@@ -1,0 +1,15 @@
+<dom-module id="matrix-element">
+  <style>
+    :host::content paper-input,
+    paper-input {
+      --paper-input-container-focus-color: #2196f3;
+      --paper-input-container-color: #ddd;
+      text-align: center;
+      font-size: 2em;
+    }
+  </style>
+  <template>
+    <iron-signals on-iron-signal-tablechange="updateMatrix"></iron-signals>
+    <div align=center id="matrix"></div>
+  </template>
+</dom-module>
