@@ -17,5 +17,11 @@ transformers:
 - polymer:
     entry_points: web/index.html
 - $dart2js:
-    minify: false
+    csp: false
+    sourceMaps: true
+    checked: false
+    #minify: true
+    commandLineOptions:
+    - --trust-type-annotations
+    - --trust-primitives
 - dart_to_js_script_rewriter
