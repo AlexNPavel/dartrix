@@ -79,8 +79,10 @@ class MainApp extends PolymerElement {
     }
     if (Matrix.equals(matrixA.ref, ref)) {
       querySelector('#ref-correct').text = 'Correct!';
+      querySelector('#ref-correct').style.color = 'green';
     } else {
       querySelector('#ref-correct').text = 'Incorrect!';
+      querySelector('#ref-correct').style.color = 'red';
     }
     querySelector('#ref-correct').classes.toggle('fade-in', true);
   }
@@ -97,8 +99,10 @@ class MainApp extends PolymerElement {
     }
     if (Matrix.equals(matrixA.rref, rref)) {
       querySelector('#rref-correct').text = 'Correct!';
+      querySelector('#rref-correct').style.color = 'green';
     } else {
       querySelector('#rref-correct').text = 'Incorrect!';
+      querySelector('#rref-correct').style.color = 'red';
     }
     querySelector('#rref-correct').classes.toggle('fade-in', true);
   }
