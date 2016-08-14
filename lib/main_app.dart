@@ -68,7 +68,7 @@ class MainApp extends PolymerElement {
   }
 
   @reflectable
-  void createREF(event, [_]) {
+  void checkREF(event, [_]) {
     matrixA.convertREF();
     ref.clear();
     for (int i = 0; i < inputs['ref'].length; i++) {
@@ -88,7 +88,7 @@ class MainApp extends PolymerElement {
   }
 
   @reflectable
-  void createRREF(event, [_]) {
+  void checkRREF(event, [_]) {
     matrixA.convertRREF();
     rref.clear();
     for (int i = 0; i < inputs['rref'].length; i++) {
