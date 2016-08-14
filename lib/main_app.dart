@@ -9,7 +9,8 @@ import 'matrix_input_element.dart';
 import 'matrix_element.dart';
 
 import 'package:polymer_elements/paper_button.dart';
-import 'package:polymer_elements/paper_input.dart';
+import 'package:polymer_elements/paper_checkbox.dart';
+
 import 'package:polymer/polymer.dart';
 import 'package:web_components/web_components.dart';
 
@@ -42,11 +43,40 @@ class MainApp extends PolymerElement {
 
   Map<String, PaperButton> buttons = new Map<String, PaperButton>();
 
+  Map<String, PaperCheckbox> checkboxes = new Map<String, PaperCheckbox>();
+
+  static final List<String> options = ['ref', 'rref'];
+  static final List<String> longOptions = [
+    'Row Echelon Form',
+    'Reduced Row Echelon Form'
+  ];
+
+  final NodeValidatorBuilder _htmlValidator = new NodeValidatorBuilder.common()
+    ..allowElement('paper-checkbox', attributes: [
+      'checked',
+      'style',
+      'aria-disabled',
+      'aria-checked',
+      'toggles',
+      'tabIndex',
+      'role'
+    ]);
+
   void ready() {
     refButton = querySelector('#refbutton');
     buttons['ref'] = refButton;
     rrefButton = querySelector('#rrefbutton');
     buttons['rref'] = rrefButton;
+    for (int i = 0; i < options.length; i++) {
+      String opt = options[i];
+      // I'm manually creating this html because .text seems to break the checkbox...
+      checkboxes[opt] = new Element.html(
+          '<paper-checkbox style="margin: 0.1em">${longOptions[i]}</paper-checkbox>',
+          validator: _htmlValidator) as PaperCheckbox;
+      querySelector('#checkboxes').append(checkboxes[opt]);
+      querySelector('#checkboxes').append(new Element.br());
+      print("Added checkbox $opt");
+    }
     matrixA.randomize();
 //    matrixA.calculateAll();
     for (int i = 0; i < matrixA.matrix.length; i++) {
