@@ -68,14 +68,14 @@ class MainApp extends PolymerElement {
     rrefButton = querySelector('#rrefbutton');
     buttons['rref'] = rrefButton;
     for (int i = 0; i < options.length; i++) {
-      String opt = options[i];
+      String opt = '${options[i]}-check';
       // I'm manually creating this html because .text seems to break the checkbox...
       checkboxes[opt] = new Element.html(
-          '<paper-checkbox style="margin: 0.1em">${longOptions[i]}</paper-checkbox>',
+          '<paper-checkbox style="margin: 0.1em" id="$opt">${longOptions[i]}</paper-checkbox>',
           validator: _htmlValidator) as PaperCheckbox;
       querySelector('#checkboxes').append(checkboxes[opt]);
       querySelector('#checkboxes').append(new Element.br());
-      print("Added checkbox $opt");
+      checkboxes[opt].checked = true;
     }
     matrixA.randomize();
 //    matrixA.calculateAll();
@@ -88,13 +88,19 @@ class MainApp extends PolymerElement {
     fire('iron-signal', detail: {'name': 'tablechange', 'data': 'mainA'});
   }
 
+  @Listen('iron-change')
+  void changeOpt(event, [_]) {
+    //window.console.log(event);
+    String opt = event.target.id;
+    String id = opt.substring(0, (opt.length - 6));
+    Element opel = querySelector('#$id-element');
+    opel.hidden = !checkboxes[opt].checked;
+  }
+
   @reflectable
   void updateinputs(event, [_]) {
-    if (complete[event.detail as String] == true) {
-      buttons[event.detail as String].disabled = false;
-    } else {
-      buttons[event.detail as String].disabled = true;
-    }
+    Element opel = buttons[event.detail as String];
+    opel.hidden = !opel.hidden;
   }
 
   @reflectable
