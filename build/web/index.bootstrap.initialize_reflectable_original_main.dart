@@ -41,7 +41,11 @@ import 'package:polymer_elements/shadow.dart' as i37;
 import 'package:polymer_elements/paper_material_shared_styles.dart' as i38;
 import 'package:polymer_elements/paper_material.dart' as i39;
 import 'package:polymer_elements/paper_button.dart' as i40;
-import 'package:dartrix/main_app.dart' as i41;
+import 'package:polymer_elements/paper_inky_focus_behavior.dart' as i41;
+import 'package:polymer_elements/iron_checked_element_behavior.dart' as i42;
+import 'package:polymer_elements/paper_checked_element_behavior.dart' as i43;
+import 'package:polymer_elements/paper_checkbox.dart' as i44;
+import 'package:dartrix/main_app.dart' as i45;
 
 main() {
   initializers.addAll([
@@ -81,7 +85,9 @@ main() {
         const i10.CustomElementProxy('paper-material'), i39.PaperMaterial),
     new InitEntry(
         const i10.CustomElementProxy('paper-button'), i40.PaperButton),
-    new InitEntry(const i31.PolymerRegister('main-app'), i41.MainApp),
+    new InitEntry(
+        const i10.CustomElementProxy('paper-checkbox'), i44.PaperCheckbox),
+    new InitEntry(const i31.PolymerRegister('main-app'), i45.MainApp),
   ]);
 
   return i0.main();
