@@ -18,18 +18,15 @@ class Matrix {
   }
 
   static bool equals(List<List<double>> correct, List<List<double>> check) {
-    if (correct.length != check.length || correct[0].length != check[0].length) {
+    if (correct.length != check.length ||
+        correct[0].length != check[0].length) {
       return false;
     }
-    print('Matrix is: $correct and check is $check');
     for (int i = 0; i < correct.length; i++) {
       for (int h = 0; h < correct[i].length; h++) {
-        print('Comparing ${correct[i][h]} to ${check[i][h]}');
         if (correct[i][h] != check[i][h]) {
-          print('Was false');
           return false;
         }
-        print('Was true');
       }
     }
     return true;
