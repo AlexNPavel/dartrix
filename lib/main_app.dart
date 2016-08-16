@@ -99,8 +99,7 @@ class MainApp extends PolymerElement {
 
   @reflectable
   void updateinputs(event, [_]) {
-    Element opel = buttons[event.detail as String];
-    opel.hidden = !opel.hidden;
+    buttons[event.detail as String].disabled = !complete[event.detail as String];
   }
 
   @reflectable
