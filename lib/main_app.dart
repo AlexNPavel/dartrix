@@ -72,7 +72,7 @@ class MainApp extends PolymerElement {
       // I'm manually creating this html because .text seems to break the checkbox...
       checkboxes[opt] = new Element.html(
           '<paper-checkbox style="margin: 0.1em" id="$opt">${longOptions[i]}</paper-checkbox>',
-          validator: _htmlValidator) as PaperCheckbox;
+          validator: _htmlValidator);
       querySelector('#checkboxes').append(checkboxes[opt]);
       querySelector('#checkboxes').append(new Element.br());
       checkboxes[opt].checked = true;
@@ -99,7 +99,8 @@ class MainApp extends PolymerElement {
 
   @reflectable
   void updateinputs(event, [_]) {
-    buttons[event.detail as String].disabled = !complete[event.detail as String];
+    buttons[event.detail as String].disabled =
+        !complete[event.detail as String];
   }
 
   @reflectable
